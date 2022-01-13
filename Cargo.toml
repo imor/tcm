@@ -1,0 +1,16 @@
+[package]
+name = "tcm"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+clap = { version = "3.0.7", features = ["derive"] }
+hyper = { version = "0.14", features = ["full"] }
+tokio = { version = "1", features = ["full"] }
+hyper-staticfile = "0.8.0"
+walkdir = "2"
+regex = "1.5.4"
+toml = "0.5.8"
+headless_chrome = "0.9.0"
