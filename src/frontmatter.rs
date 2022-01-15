@@ -54,7 +54,7 @@ fn create_frontmatter(path: &Path) -> Result<Option<Frontmatter>, Cow<'static, s
 fn create_image_path(path: &Path) -> Result<PathBuf, &'static str> {
     let image_path = path.parent().ok_or("Failed to find parent of path")?
         .join(&format!("{}.png", path.file_stem().expect("Failed to get file stem").to_str()
-            .expect("Failed to convert from OsString"))).to_path_buf();
+            .expect("Failed to convert from OsString")));
     Ok(image_path)
 }
 

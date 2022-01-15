@@ -17,20 +17,14 @@ pub(crate) fn create_images_from_template(frontmatter_list: Vec<Frontmatter>, ch
         println!("Saving {}", frontmatter.image_path.display());
 
         //Wait for template to open
-        match tab.navigate_to(url) {
-            Err(e) => {
-                eprintln!("Error while navigating to url: {}", e);
-                continue;
-            }
-            _ => {}
+        if let Err(e) = tab.navigate_to(url) {
+            eprintln!("Error while navigating to url: {}", e);
+            continue;
         }
 
-        match tab.wait_until_navigated() {
-            Err(e) => {
-                eprintln!("Error while waiting for navigation: {}", e);
-                continue;
-            }
-            _ => {}
+        if let Err(e) = tab.wait_until_navigated() {
+            eprintln!("Error while waiting for navigation: {}", e);
+            continue;
         }
 
         //Update text in template
@@ -45,12 +39,9 @@ pub(crate) fn create_images_from_template(frontmatter_list: Vec<Frontmatter>, ch
             fitText();
         ", title.replace("'", "\\'"), subtitle.replace("'", "\\'"));
 
-        match tab.evaluate(&func, true){
-            Err(e) => {
-                eprintln!("Error while evaluating js: {}", e);
-                continue;
-            }
-            _ => {}
+        if let Err(e) = tab.evaluate(&func, true){
+            eprintln!("Error while evaluating js: {}", e);
+            continue;
         }
 
         //Render and save
@@ -77,9 +68,8 @@ pub(crate) fn create_images_from_template(frontmatter_list: Vec<Frontmatter>, ch
                 continue;
             }
         };
-        match fs::write(&frontmatter.image_path, &png_data) {
-            Err(e) => eprintln!("Error while capturing screenshot: {}", e),
-            _ => {}
+        if let Err(e) = fs::write(&frontmatter.image_path, &png_data) {
+            eprintln!("Error while capturing screenshot: {}", e);
         }
     }
 }
