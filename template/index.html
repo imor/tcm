@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        #container {
+            width: 800px;
+            height: 419px;
+            border: 10px solid #ffcc00;
+        }
+
+        #logo {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            left: 368px;
+            top: 40px;
+        }
+
+        #title {
+            position: absolute;
+            width: 600px;
+            height: 150px;
+            left: 100px;
+            top: 110px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #4c4c4c;
+
+            font-family: 'Spartan';
+            font-weight: 700;
+            font-size: 50px;
+        }
+
+        #title span {
+            vertical-align: middle;
+        }
+
+        #subtitle {
+            position: absolute;
+            width: 600px;
+            height: 80px;
+            left: 100px;
+            top: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #4c4c4c;
+
+            font-family: 'Spartan';
+            font-weight: 300;
+            font-size: 30px;
+        }
+
+        #subtitle span {
+            vertical-align: middle;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Fanwood+Text:ital@0;1&family=Fira+Code&family=Spartan:wght@300;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="container">
+        <img id="logo" src="/logo.png"></img>
+        <div id="title"><span>Replace this text with the title</span></div>
+        <div id="subtitle"><span>Replace this text with the subtitle.</span></div>
+    </div>
+    <script>
+        const resizeText = ({ element, parent, minSize, maxSize}) => {
+            const hasOverflown = (element, parent) => element.offsetWidth > parent.clientWidth ||
+                element.offsetHeight > parent.clientHeight;
+
+            let i = minSize;
+            let overflown = false;
+
+            while (!overflown && i < maxSize) {
+                element.style.fontSize = `${i}px`;
+                overflown = hasOverflown(element, parent);
+                if (!overflown) {
+                    i++;
+                }
+            }
+
+            if (overflown) {
+                element.style.fontSize = `${i - 1}px`
+            }
+        }
+
+        const setText = (titleText, subtitleText) => {
+            let titleSpan = document.querySelector('#title span');
+            let subtitleSpan = document.querySelector('#subtitle span');
+            titleSpan.innerText = titleText;
+            subtitleSpan.innerText = subtitleText;
+        }
+
+        const fitText = () => {
+            resizeText({
+                element: document.querySelector('#title span'),
+                parent: document.querySelector('#title'),
+                minSize: 30,
+                maxSize: 50
+            })
+
+            resizeText({
+                element: document.querySelector('#subtitle span'),
+                parent: document.querySelector('#subtitle'),
+                minSize: 24,
+                maxSize: 30
+            })
+        }
+    </script>
+</body>
+
+</html>
