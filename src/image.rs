@@ -32,8 +32,8 @@ pub(crate) fn create_images_from_template(frontmatter_list: Vec<Frontmatter>, ch
         let subtitle = &frontmatter.description;
         let func = format!(r"
             let text = {{
-                title: '{}',
-                subtitle: '{}'
+                titleText: '{}',
+                subtitleText: '{}'
             }};
             setText(text);
             fitText();
