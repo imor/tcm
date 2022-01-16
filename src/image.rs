@@ -7,11 +7,23 @@ pub(crate) fn create_images_from_template(frontmatter_list: Vec<Frontmatter>, ch
     let url = &format!("http://localhost:{}/", port);
     let options = LaunchOptionsBuilder::default()
         .path(Some(chrome_path.to_path_buf()))
-        .build().expect("Failed to build LaunchOptionsBuilder");
-    let browser = Browser::new(options).expect("Failed to create browser");
+        .build().expect("Failed to build LaunchOptions");
+    let browser = match Browser::new(options) {
+        Ok(browser) => browser,
+        Err(e) => {
+            eprintln!("Failed to create browser: {}", e);
+            return;
+        }
+    };
 
     // Wait for tab to open
-    let tab = browser.wait_for_initial_tab().expect("Failed to wait for initial tab");
+    let tab = match browser.wait_for_initial_tab() {
+        Ok(tab) => tab,
+        Err(e) => {
+            eprintln!("Failed to wait for initial tab: {}", e);
+            return;
+        }
+    };
 
     for frontmatter in frontmatter_list {
         println!("Saving {}", frontmatter.image_path.display());
@@ -30,16 +42,16 @@ pub(crate) fn create_images_from_template(frontmatter_list: Vec<Frontmatter>, ch
         //Update text in template
         let title = &frontmatter.title;
         let subtitle = &frontmatter.description;
-        let func = format!(r"
-            let text = {{
-                titleText: '{}',
-                subtitleText: '{}'
-            }};
-            setText(text);
-            fitText();
-        ", title.replace("'", "\\'"), subtitle.replace("'", "\\'"));
 
-        if let Err(e) = tab.evaluate(&func, true){
+        let title = title.replace("'", "\\'");
+        let subtitle = subtitle.replace("'", "\\'");
+
+        let js_expr = format!(r"
+            setText('{}', '{}');
+            fitText();
+        ", title, subtitle);
+
+        if let Err(e) = tab.evaluate(&js_expr, true){
             eprintln!("Error while evaluating js: {}", e);
             continue;
         }
